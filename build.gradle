@@ -1,0 +1,47 @@
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '3.2.1'
+	id 'io.spring.dependency-management' version '1.1.4'
+	id "com.google.protobuf" version "0.9.4"
+}
+
+group = 'com.example'
+version = '0.0.1-SNAPSHOT'
+
+java {
+	sourceCompatibility = '17'
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	implementation 'net.devh:grpc-spring-boot-starter:2.13.1.RELEASE'
+	implementation 'org.springframework.boot:spring-boot-starter'
+	implementation group: 'com.google.code.gson', name: 'gson', version: '2.7'
+	compileOnly 'org.apache.tomcat:annotations-api:6.0.53'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}
+
+protobuf {
+	protoc {
+		artifact = 'com.google.protobuf:protoc:3.10.1'
+	}
+
+	plugins {
+		grpc {
+			artifact = 'io.grpc:protoc-gen-grpc-java:1.25.0'
+		}
+	}
+
+	generateProtoTasks {
+		all()*.plugins {
+			grpc {}
+		}
+	}
+}
